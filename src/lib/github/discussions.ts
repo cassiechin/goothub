@@ -86,7 +86,7 @@ export async function getDiscussionList(): Promise<Discussion[]> {
 	const body = await queryGraphQl(`
 		query discussionList($repoOwner: String!, $repoName: String!) {
 			repository(owner: $repoOwner, name: $repoName) {
-				discussions(last: 10) {
+				discussions(last: 100) {
 					edges {
 						node {
 							number

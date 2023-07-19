@@ -26,6 +26,7 @@ export function routeData({ params }: RouteDataArgs) {
 
 export default function Discussions() {
 	const discussionAndComments = useRouteData<typeof routeData>();
+	console.log(discussionAndComments);
 	const reactions = createMemo(
 		() => discussionAndComments()?.discussion.reactionGroups.filter((group) => group.totalCount > 0)
 	);
