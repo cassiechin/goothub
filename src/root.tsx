@@ -27,6 +27,7 @@ export default function Root() {
 					<ErrorBoundary>
 						<A href="/">Home</A>
 						<A href="/discussions">Discussions</A>
+						<A href="/about">About</A>
 						<Routes>
 							<FileRoutes />
 						</Routes>
