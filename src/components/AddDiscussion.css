@@ -1,0 +1,14 @@
+.add-discussion {
+    display: flex;
+    flex-direction: column;
+}
+
+.discussion-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.discussion-form-item {
+    margin-top: 20px;
+}
