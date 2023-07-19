@@ -2,6 +2,7 @@ import { For, createMemo } from 'solid-js';
 import { RouteDataArgs, Title, useRouteData } from 'solid-start';
 import { createServerData$ } from 'solid-start/server';
 import { AddReaction } from '~/components/AddReaction';
+import { AddReply } from '~/components/AddReply';
 import {
 	REACTION_EMOJI,
 	getDiscussionComments,
@@ -12,6 +13,8 @@ export function routeData({ params }: RouteDataArgs) {
 	return createServerData$(
 		(id) => {
 			const discussionId = Number(id);
+			console.log('discussion ID!');
+			console.log({discussionId});
 			return Promise.all([
 				getDiscussionDetails(discussionId),
 				getDiscussionComments(discussionId)
@@ -54,7 +57,13 @@ export default function Discussions() {
 				<div class="comments">
 					<h2>Comments</h2>
 					<ul>
-						<For each={comments()}>{(comment) => <div innerHTML={comment.bodyHTML}></div>}</For>
+						<For each={comments()}>{(comment) => (
+							<>
+								<div innerHTML={comment.bodyHTML}></div>
+								<AddReply discussionId={discussion()?.number} />
+							</>
+						)}
+						</For>
 					</ul>
 				</div>
 			</section>

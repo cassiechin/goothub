@@ -1,5 +1,6 @@
 import { App } from 'octokit';
 import GITHUB_KEY from '../../../.env.private-key.pem?raw';
+import type { GraphQlQueryResponseData } from "@octokit/graphql";
 
 export interface Discussion {
 	number: number;
@@ -106,6 +107,7 @@ export async function getDiscussionList(): Promise<Discussion[]> {
 		author: edge.node.author.login,
 		createdAt: edge.node.createdAt
 	}));
+	console.log('test!', discussions);
 
 	return discussions;
 }
@@ -186,4 +188,29 @@ export async function getDiscussionComments(number: number): Promise<DiscussionC
 		createdAt: comment.node.createdAt,
 		bodyHTML: comment.node.bodyHTML
 	}));
+}
+
+// TODO, add clientMutationId and replyToId
+export async function addReply(comment: String, discussionId: String): Promise<Boolean> {
+	console.log('before reply');
+	const body = await queryGraphQl(
+		`
+		mutation discussionComment($comment: String!, $discussionId: ID!) {
+			addDiscussionComment(input: {body: $comment, discussionId: $discussionId}) {
+				clientMutationId
+			}
+		}
+	`,
+		{ comment, discussionId }
+	);
+
+	console.log('after reply');
+	console.log({body})
+	return true;
+	/*const comments = (body as any).repository.discussion.comments.edges;
+	return comments.map((comment: any) => ({
+		author: comment.node.author.login,
+		createdAt: comment.node.createdAt,
+		bodyHTML: comment.node.bodyHTML
+	}));*/
 }
