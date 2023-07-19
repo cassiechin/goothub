@@ -1,5 +1,4 @@
 import { App } from 'octokit';
-import GITHUB_KEY from '../../../.env.private-key.pem?raw';
 import type { GraphQlQueryResponseData } from "@octokit/graphql";
 
 export interface Discussion {
@@ -65,7 +64,7 @@ async function queryGraphQl<T>(query: string, parameters: QueryVariables = {}): 
 
 	const app = new App({
 		appId: GITHUB_APP_ID,
-		privateKey: requireEnv('GITHUB_PRIVATE_KEY').replace(/\\n/g, '\n') || GITHUB_KEY,
+		privateKey: requireEnv('GITHUB_PRIVATE_KEY').replace(/\\n/g, '\n'),
 		oauth: { clientId: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET }
 	});
 	const octokit = await app.getInstallationOctokit(GITHUB_INSTALLATION_ID);
