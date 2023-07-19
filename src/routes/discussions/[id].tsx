@@ -2,6 +2,7 @@ import { For, createMemo } from 'solid-js';
 import { RouteDataArgs, Title, useRouteData } from 'solid-start';
 import { createServerData$ } from 'solid-start/server';
 import { AddReaction } from '~/components/AddReaction';
+import { AddReply } from '~/components/AddReply';
 import {
 	REACTION_EMOJI,
 	getDiscussionComments,
@@ -33,7 +34,7 @@ export default function Discussions() {
 
 	return (
 		<main>
-			<Title> - Discussions</Title>
+			<Title>GootHub - Discussions</Title>
 			<section>
 				<h1>{discussion()?.title}</h1>
 				<p>
@@ -54,7 +55,13 @@ export default function Discussions() {
 				<div class="comments">
 					<h2>Comments</h2>
 					<ul>
-						<For each={comments()}>{(comment) => <div innerHTML={comment.bodyHTML}></div>}</For>
+						<For each={comments()}>{(comment) => (
+							<>
+								<div innerHTML={comment.bodyHTML}></div>
+								<AddReply discussionId={discussion()?.id} commentId={comment.id} />
+							</>
+						)}
+						</For>
 					</ul>
 				</div>
 			</section>

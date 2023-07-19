@@ -1,7 +1,9 @@
 import { App } from 'octokit';
 import GITHUB_KEY from '../../../.env.private-key.pem?raw';
+import type { GraphQlQueryResponseData } from "@octokit/graphql";
 
 export interface Discussion {
+	id: string;
 	number: number;
 	title: string;
 	author: string;
@@ -116,6 +118,7 @@ export async function getDiscussionDetails(number: number): Promise<DiscussionDe
 		query discussionDetails($repoOwner: String!, $repoName: String!, $number: Int!) {
 			repository(owner: $repoOwner, name: $repoName) {
 				discussion(number: $number) {
+					id
 					number
 					title
 					author {
@@ -138,6 +141,7 @@ export async function getDiscussionDetails(number: number): Promise<DiscussionDe
 
 	const discussion = (body as any).repository.discussion;
 	return {
+		id: discussion.id,
 		number: discussion.number,
 		title: discussion.title,
 		author: discussion.author.login,
@@ -151,6 +155,7 @@ export async function getDiscussionDetails(number: number): Promise<DiscussionDe
 }
 
 export interface DiscussionComment {
+	id: string;
 	author: string;
 	createdAt: string;
 	bodyHTML: string;
@@ -165,6 +170,7 @@ export async function getDiscussionComments(number: number): Promise<DiscussionC
 					comments(last: 10) {
 						edges {
 							node {
+								id
 								author {
 									login
 								}
@@ -182,8 +188,32 @@ export async function getDiscussionComments(number: number): Promise<DiscussionC
 
 	const comments = (body as any).repository.discussion.comments.edges;
 	return comments.map((comment: any) => ({
+		id: comment.node.id,
 		author: comment.node.author.login,
 		createdAt: comment.node.createdAt,
 		bodyHTML: comment.node.bodyHTML
 	}));
+}
+
+// TODO, add clientMutationId and replyToId
+// TODO, add proper response object
+export async function addReply(comment: String, discussionId: String, commentId?: String): Promise<Boolean> {
+	const body = await queryGraphQl(
+		`
+		mutation discussionComment($comment: String!, $discussionId: ID!, $commentId: ID) {
+			addDiscussionComment(input: {body: $comment, discussionId: $discussionId, replyToId: $commentId}) {
+				clientMutationId
+			}
+		}
+	`,
+		{ comment, discussionId, commentId }
+	);
+
+	return true;
+	/*const comments = (body as any).repository.discussion.comments.edges;
+	return comments.map((comment: any) => ({
+		author: comment.node.author.login,
+		createdAt: comment.node.createdAt,
+		bodyHTML: comment.node.bodyHTML
+	}));*/
 }
