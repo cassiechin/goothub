@@ -9,6 +9,7 @@ import {
 	getDiscussionComments,
 	getDiscussionDetails
 } from '~/lib/github/discussions';
+import { comment } from 'postcss';
 
 export function routeData({ params }: RouteDataArgs) {
 	return createServerData$(
@@ -51,7 +52,7 @@ export default function Discussions() {
 							</button>
 						)}
 					</For>
-					<AddReaction />
+					<AddReaction subjectId={discussionId} />
 				</div>
 				<div class="comments">
 					<h2>Comments</h2>

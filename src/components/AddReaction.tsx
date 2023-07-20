@@ -1,19 +1,26 @@
-import { For, createSignal } from 'solid-js';
+import { For, createSignal, Accessor } from 'solid-js';
 import { REACTIONS, REACTION_EMOJI } from '~/lib/github/discussions';
 import './AddReaction.css';
 
-export function AddReaction() {
+export function AddReaction({subjectId}: {subjectId: Accessor<String>}) {
 	const [shown, setShown] = createSignal(false);
 
-	function addReaction(reaction: (typeof REACTIONS)[number]) {
+	async function addReaction(reaction: (typeof REACTIONS)[number]) {
 		setShown(false);
+		await fetch('/api/reaction', {
+			method: 'POST',
+			headers: {
+				"Content-Type": "application/json",
+			  },
+			body: JSON.stringify({content:reaction, subjectId: subjectId()}),
+		});
 	}
 
 	return (
 		<div class="add-reaction">
 			<button onClick={() => setShown((s) => !s)}>Add reaction</button>
 			<dialog open={shown()}>
-				<For each={REACTIONS}>{(reaction) => <button>{REACTION_EMOJI[reaction]}</button>}</For>
+				<For each={REACTIONS}>{(reaction) => <button onClick={() => addReaction(reaction)}>{REACTION_EMOJI[reaction]}</button>}</For>
 			</dialog>
 		</div>
 	);
