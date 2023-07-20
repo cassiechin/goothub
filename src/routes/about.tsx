@@ -1,7 +1,6 @@
 import { useRouteData } from "solid-start";
 import { createServerData$ } from "solid-start/server";
 import { getDeployment } from "~/lib/vercel/deployment";
-import { Deployment } from "~/lib/vercel/types";
 
 export function routeData() {
     const deployment = createServerData$(async () => getDeployment());
