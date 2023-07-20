@@ -12,7 +12,7 @@ export default function Home() {
 	return (
 		<main>
 			<Title>Home</Title>
-			Welcome!
+			<p>Welcome!</p>			
 			<button onClick={CallSignIn}>Sign In</button>
 		</main>
 	);
