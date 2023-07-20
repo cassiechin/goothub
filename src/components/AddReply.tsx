@@ -27,7 +27,7 @@ export function AddReply({ discussionId, commentId } : { discussionId: String, c
 			{/* TODO convert to textarea on click? */}
 			{/* TODO, is this the best way to use an input? */}
 			<input type="text" use:model={[reply, setReply]} />
-			<button onClick={() => addReply()}>Add reply</button>
+			<button onClick={addReply}>Add reply</button>
 			{/* <dialog open={shown()}> */}
 				{/* <textarea></textarea> */}
 			{/* </dialog> */}
