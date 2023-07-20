@@ -12,6 +12,19 @@
     align-items: center;
 }
 
+.left-nav > * {
+    margin: 0 15px 0 0;
+}
+
+.left-nav > *:hover {
+    text-decoration: underline;
+}
+
+main {
+    display: flex;
+    align-items: center;
+}
+
 .user-img {
     border-radius: 50%;
     width: 32px;
