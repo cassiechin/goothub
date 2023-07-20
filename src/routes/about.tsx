@@ -12,7 +12,6 @@ export function routeData() {
 export default function About() {
     const { deployment } = useRouteData<typeof routeData>();
 
-    const { uid = "", url = "", created = "" } = (deployment() ?? {}) as Deployment;
     return (
         <>
             <div>Welcome to this amazing Solid app!</div>
@@ -20,9 +19,9 @@ export default function About() {
             <div>
                 <h3>Deployment</h3>
                 <ul>
-                    <li>UID: {uid}</li>
-                    <li>URL: {url}</li>
-                    <li>Created: {`${new Date(created)}`}</li>
+                    <li>UID: {deployment()?.uid}</li>
+                    <li>URL: {deployment()?.url}</li>
+                    <li>Created: {`${new Date(deployment()?.created || 0)}`}</li>
                 </ul>
             </div>
         </>
