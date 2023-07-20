@@ -1,5 +1,6 @@
 import { App } from 'octokit';
 import type { GraphQlQueryResponseData } from "@octokit/graphql";
+import { requireEnv } from '../requireEnv';
 
 export interface Discussion {
 	id: string;
@@ -39,15 +40,6 @@ export interface ReactionGroup {
 export interface DiscussionDetails extends Discussion {
 	reactionGroups: ReactionGroup[];
 	bodyHTML: string;
-}
-
-function requireEnv(key: string): string {
-	const value = process.env[key];
-	if (value == null) {
-		throw new Error(`Missing ${key} environnement variable.`);
-	}
-
-	return value;
 }
 
 interface QueryVariables {
