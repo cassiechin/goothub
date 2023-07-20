@@ -94,7 +94,7 @@ async function queryGraphQl<T>(query: string, parameters: QueryVariables = {}): 
 }
 
 export async function getDiscussionList(after?: String, before?: String): Promise<DiscussionList> {
-	const PAGE_SIZE = 2;
+	const PAGE_SIZE = 5;
 
 	let first, last;
 
@@ -228,7 +228,7 @@ export async function getDiscussionComments(number: number): Promise<DiscussionC
 	}));
 }
 
-// TODO, add clientMutationId and replyToId
+// TODO, add clientMutationId
 // TODO, add proper response object
 export async function addReply(comment: String, discussionId: String, commentId?: String): Promise<Boolean> {
 	const body = await queryGraphQl(
