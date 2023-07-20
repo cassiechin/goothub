@@ -12,14 +12,13 @@ import {
 
 export function routeData({ params }: RouteDataArgs) {
 	return createServerData$(
-		(id) => {
+		async (id) => {
 			const discussionId = Number(id);
-			return Promise.all([
+			const data = await Promise.all([
 				getDiscussionDetails(discussionId),
 				getDiscussionComments(discussionId)
-			]).then((data) => {
-				return { discussion: data[0], comments: data[1] };
-			});
+			]);
+			return { discussion: data[0], comments: data[1] };
 		},
 		{ key: () => params.id }
 	);
@@ -30,8 +29,9 @@ export default function Discussions() {
 	const reactions = createMemo(
 		() => discussionAndComments()?.discussion.reactionGroups.filter((group) => group.totalCount > 0)
 	);
-	const discussion = () => discussionAndComments()?.discussion;
+	const discussion = createMemo(() => discussionAndComments()?.discussion);
 	const comments = () => discussionAndComments()?.comments;
+	const discussionId = createMemo(() => discussionAndComments()?.discussion.id);
 
 	return (
 		<main>
@@ -59,12 +59,12 @@ export default function Discussions() {
 						<For each={comments()}>{(comment) => (
 							<>
 								<div innerHTML={comment.bodyHTML}></div>
-								<AddReply discussionId={discussion()?.id} commentId={comment.id} />
+								<AddReply discussionId={discussionId} commentId={comment.id} />
 							</>
 						)}
 						</For>
 					</ul>
-					<AddComment discussionId={discussion()?.id} onSuccess={refetchRouteData}/>
+					<AddComment discussionId={discussionId} onSuccess={refetchRouteData}/>
 				</div>
 			</section>
 		</main>
