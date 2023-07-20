@@ -1,8 +1,9 @@
 import { For, createMemo } from 'solid-js';
-import { RouteDataArgs, Title, useRouteData } from 'solid-start';
+import { RouteDataArgs, Title, refetchRouteData, useRouteData } from 'solid-start';
 import { createServerData$ } from 'solid-start/server';
 import { AddReaction } from '~/components/AddReaction';
 import { AddReply } from '~/components/AddReply';
+import { AddComment } from '~/components/AddComment';
 import {
 	REACTION_EMOJI,
 	getDiscussionComments,
@@ -63,6 +64,7 @@ export default function Discussions() {
 						)}
 						</For>
 					</ul>
+					<AddComment discussionId={discussion()?.id} onSuccess={refetchRouteData}/>
 				</div>
 			</section>
 		</main>
