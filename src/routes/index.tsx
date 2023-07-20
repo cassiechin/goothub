@@ -1,6 +1,6 @@
 import { Title, useRouteData } from 'solid-start';
-import { login } from '~/lib/github/discussions';
-import { createServerData$ } from 'solid-start/server';
+// import { login } from '~/lib/github/discussions';
+// import { createServerData$ } from 'solid-start/server';
 import { signIn } from "@solid-auth/base/client";
 
 function CallSignIn() {
