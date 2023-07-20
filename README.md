@@ -28,3 +28,10 @@ By default, `npm run build` will generate a Node app that you can run with `npm 
 Check out the npm scripts in the package.json for more on:
 
 - Formatting (with Prettier)
+
+## Docs
+- SolidStart: https://start.solidjs.com/getting-started/what-is-solidstart
+- GitHub GraphQL Reference: https://docs.github.com/en/graphql/reference
+
+## Beta Site
+https://goothub-beta.vercel.app/

@@ -1,16 +1,17 @@
-import { For, createSignal } from 'solid-js';
+import { For, createSignal, createRenderEffect } from 'solid-js';
 import './AddReply.css';
-import { createRenderEffect } from "solid-js";
 
 export function AddReply({ discussionId, commentId } : { discussionId: String, commentId: String}) {
-	function addReply() {
-		fetch('/api/comments', {
+	// TODO, move to reusable file so that AddComment can also use
+	async function addReply() {
+		await fetch('/api/comments', {
 			method: 'POST',
 			headers: {
 				"Content-Type": "application/json",
 			  },
 			body: JSON.stringify({ comment: reply(), discussionId, commentId }),
 		});
+		setReply("");
 	}
 
 	const [reply, setReply] = createSignal("");
@@ -23,14 +24,10 @@ export function AddReply({ discussionId, commentId } : { discussionId: String, c
 
 	return (
 		<div class="add-reply">
-			{/* TODO add Write a reply text to background? */}
 			{/* TODO convert to textarea on click? */}
 			{/* TODO, is this the best way to use an input? */}
-			<input type="text" use:model={[reply, setReply]} />
-			<button onClick={() => addReply()}>Add reply</button>
-			{/* <dialog open={shown()}> */}
-				{/* <textarea></textarea> */}
-			{/* </dialog> */}
+			<input type="text" placeholder="Write a reply" use:model={[reply, setReply]} />
+			<button onClick={addReply}>Reply</button>
 		</div>
 	);
 }
