@@ -14,7 +14,7 @@ import {
 } from 'solid-start';
 import './root.css';
 import { SessionProvider } from "@solid-auth/base/client";
-import {TopNav} from './components/topnav';
+import {TopNav} from './components/TopNav';
 
 
 export default function Root() {
