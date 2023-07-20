@@ -1,15 +1,18 @@
+import { createResource } from "solid-js";
 import { useRouteData } from "solid-start";
-import { createServerData$ } from "solid-start/server";
 import { getDeployment } from "~/lib/vercel/deployment";
+import { Deployment } from "~/lib/vercel/types";
 
 export function routeData() {
-	return createServerData$(() => getDeployment());
+    const [deployment] = createResource(async () => getDeployment());
+
+    return { deployment };
 }
 
 export default function About() {
-    const deployment = useRouteData<typeof routeData>();
+    const { deployment } = useRouteData<typeof routeData>();
 
-    const { uid = "", url = "", created = ""} = deployment() ?? {};
+    const { uid = "", url = "", created = "" } = (deployment() ?? {}) as Deployment;
     return (
         <>
             <div>Welcome to this amazing Solid app!</div>
