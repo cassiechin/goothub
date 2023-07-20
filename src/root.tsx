@@ -13,6 +13,9 @@ import {
 	Title
 } from 'solid-start';
 import './root.css';
+import { SessionProvider } from "@solid-auth/base/client";
+import {TopNav} from './components/TopNav';
+
 
 export default function Root() {
 	return (
@@ -23,17 +26,18 @@ export default function Root() {
 				<Meta name="viewport" content="width=device-width, initial-scale=1" />
 			</Head>
 			<Body>
+				<SessionProvider>
 				<Suspense>
 					<ErrorBoundary>
-						<A href="/">Home</A>
-						<A href="/discussions">Discussions</A>
-						<A href="/about">About</A>
+						<TopNav/>
 						<Routes>
 							<FileRoutes />
 						</Routes>
 					</ErrorBoundary>
 				</Suspense>
+				</SessionProvider>
 				<Scripts />
+
 			</Body>
 		</Html>
 	);
