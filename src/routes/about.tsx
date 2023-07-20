@@ -12,8 +12,10 @@ export default function About() {
     const { deployment } = useRouteData<typeof routeData>();
 
     return (
-        <>
-            <div>Welcome to this amazing Solid app!</div>
+        <div>        
+			<h1 class="text-3xl font-bold underline">
+				ABOUT
+			</h1>
             <img src="github.png"></img>
             <div>
                 <h3>Deployment</h3>
@@ -23,6 +25,6 @@ export default function About() {
                     <li>Created: {`${new Date(deployment()?.created || 0)}`}</li>
                 </ul>
             </div>
-        </>
+        </div>
     );
 }

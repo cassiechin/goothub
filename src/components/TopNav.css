@@ -1,0 +1,29 @@
+.top-nav {
+    background: #009FFD;
+    display: flex;
+    color: #EAF6FF;
+    font-weight: 500;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.left-nav, .right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.user-img {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin: 0 20px 0 10px;
+}
+
+button {
+    @apply font-bold px-4 rounded;
+    @apply bg-blue-500 text-white;
+}
+
+button:hover {
+    @apply bg-blue-700;
+}
