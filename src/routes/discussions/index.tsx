@@ -1,7 +1,9 @@
 import { For } from 'solid-js';
-import { A, Title, useRouteData } from 'solid-start';
-import { createServerData$ } from 'solid-start/server';
+import { A, Title, useRouteData, useNavigate } from 'solid-start';
+import {redirect, createServerData$ } from 'solid-start/server';
 import { getDiscussionList } from '~/lib/github/discussions';
+import { AddDiscussion } from '~/components/AddDiscussion';
+import './index.css';
 
 export function routeData() {
 	return createServerData$(() => getDiscussionList());
@@ -9,11 +11,20 @@ export function routeData() {
 
 export default function Discussions() {
 	const discussions = useRouteData<typeof routeData>();
+	const discussionForm = useRouteData<typeof routeData>();
+	const navigate = useNavigate();
+
+	function goToPage() {
+		console.log('test does this click');
+		navigate('../discussionForm');
+	}
+
 	const PAGE_SIZE = 5;
 	const PAGE_NUM = 1; // TODO: use props
 	return (
 		<main>
 			<Title>Discussions</Title>
+			<button onClick={() => goToPage()}>New Discussion</button>
 			<h1>Discussions</h1>
 			<table style={{"text-align": "left"}}>
 				<tbody>

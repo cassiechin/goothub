@@ -1,0 +1,25 @@
+.add-discussion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.discussion-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.discussion-form-item {
+    margin-top: 20px;
+}
+
+input, textarea {
+    min-width: 300px;
+}
+
+.submit-button {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
