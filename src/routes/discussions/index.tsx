@@ -3,6 +3,7 @@ import { A, Title, useRouteData, useNavigate } from 'solid-start';
 import {redirect, createServerData$ } from 'solid-start/server';
 import { getDiscussionList } from '~/lib/github/discussions';
 import { AddDiscussion } from '~/components/AddDiscussion';
+import './index.css';
 
 export function routeData() {
 	return createServerData$(() => getDiscussionList());
@@ -23,7 +24,7 @@ export default function Discussions() {
 	return (
 		<main>
 			<Title>Discussions</Title>
-			<button onClick={() => goToPage()}>Create Discussion</button>
+			<button onClick={() => goToPage()}>New Discussion</button>
 			<h1>Discussions</h1>
 			<table style={{"text-align": "left"}}>
 				<tbody>

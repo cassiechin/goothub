@@ -5,8 +5,8 @@ import './AddDiscussion.css';
 export function AddDiscussion() {
 	// const [shown, setShown] = createSignal(false);
 
-	function addDiscussion(reaction: (typeof REACTIONS)[number]) {
-		console.log('react with', reaction);
+	function addDiscussion() {
+		console.log('react with');
 	}
 
 	return (
@@ -24,6 +24,9 @@ export function AddDiscussion() {
                         Discussion:             
                         <textarea></textarea>
                     </label>
+                </div>
+                <div class="submit-button">
+                    <button onClick={() => addDiscussion()}>Submit</button>
                 </div>
             </div>
 		</div>
