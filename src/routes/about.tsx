@@ -12,17 +12,19 @@ export default function About() {
     const { deployment } = useRouteData<typeof routeData>();
 
     return (
-        <>
-            <div>Welcome to this amazing Solid app!</div>
-            <img src="github.png"></img>
+        <main>        
+			<h1>About</h1>
             <div>
-                <h3>Deployment</h3>
+                <img src="github.png"></img>                
+            </div>
+            <div>
+                <h2>Deployment</h2>
                 <ul>
                     <li>UID: {deployment()?.uid}</li>
                     <li>URL: {deployment()?.url}</li>
                     <li>Created: {`${new Date(deployment()?.created || 0)}`}</li>
                 </ul>
             </div>
-        </>
+        </main>
     );
 }
