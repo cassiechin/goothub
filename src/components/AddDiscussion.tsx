@@ -1,13 +1,30 @@
-import { For, createSignal } from 'solid-js';
-import { REACTIONS, REACTION_EMOJI } from '~/lib/github/discussions';
+import { createSignal, createRenderEffect } from 'solid-js';
 import './AddDiscussion.css';
 
-export function AddDiscussion() {
+export function AddDiscussion({}) {
 	// const [shown, setShown] = createSignal(false);
 
 	function addDiscussion() {
-		console.log('react with');
+        console.log(title());
+        console.log(discussion());
+
+        fetch('/api/discussion', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({discussionBody: discussion(), title: title(), categoryId: null})
+        });
 	}
+
+    const [discussion, body] = createSignal("");
+    const [title, titlebody] = createSignal("");
+
+    function model(el, value) {
+		const [field, setField] = value();
+		createRenderEffect(() => (el.value = field()));
+        el.addEventListener("input", (e) => setField(e.target.value));
+	  }
 
 	return (
 		<div class="add-discussion">
@@ -16,13 +33,13 @@ export function AddDiscussion() {
                 <div class="discussion-form-item">
                     <label>
                         Title:             
-                        <input></input>
+                        <input use:model={[title, titlebody]}></input>
                     </label>
                 </div>
                 <div class="discussion-form-item">
                     <label>
                         Discussion:             
-                        <textarea></textarea>
+                        <textarea use:model={[discussion, body]}></textarea>
                     </label>
                 </div>
                 <div class="submit-button">

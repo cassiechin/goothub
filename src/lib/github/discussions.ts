@@ -61,6 +61,7 @@ async function queryGraphQl<T>(query: string, parameters: QueryVariables = {}): 
 	const GITHUB_INSTALLATION_ID = Number(requireEnv('GITHUB_INSTALLATION_ID'));
 	const GITHUB_REPO_OWNER = requireEnv('GITHUB_REPO_OWNER');
 	const GITHUB_REPO_NAME = requireEnv('GITHUB_REPO_NAME');
+	const GITHUB_REPO_ID = requireEnv('GITHUB_REPO_ID');
 
 	const app = new App({
 		appId: GITHUB_APP_ID,
@@ -74,7 +75,8 @@ async function queryGraphQl<T>(query: string, parameters: QueryVariables = {}): 
 		Object.assign(
 			{
 				repoOwner: GITHUB_REPO_OWNER,
-				repoName: GITHUB_REPO_NAME
+				repoName: GITHUB_REPO_NAME,
+				repositoryId: GITHUB_REPO_ID,
 			},
 			parameters
 		)
@@ -215,4 +217,22 @@ export async function addReply(comment: String, discussionId: String, commentId?
 		createdAt: comment.node.createdAt,
 		bodyHTML: comment.node.bodyHTML
 	}));*/
+}
+
+// TODO, add clientMutationId and replyToId
+// TODO, add proper response object
+export async function createDiscussion(discussionBody: String, title: String, categoryId: String): Promise<Boolean> {
+	const body = await queryGraphQl(
+		`		
+		mutation createDiscussion($discussionBody: String!, $title: String!, $repositoryId: ID!, $categoryId: ID!,) {
+			createDiscussion(input: {repositoryId: $repositoryId, categoryId: $categoryId, body: $discussionBody, title: $title}) {
+				clientMutationId,
+				discussion
+			}
+		}
+	`,
+		{ discussionBody, title, categoryId }
+	);
+
+	return true;
 }

@@ -1,6 +1,5 @@
-import { For, createSignal } from 'solid-js';
+import { createRenderEffect, createSignal } from 'solid-js';
 import './AddReply.css';
-import { createRenderEffect } from "solid-js";
 
 export function AddReply({ discussionId, commentId } : { discussionId: String, commentId: String}) {
 	function addReply() {
