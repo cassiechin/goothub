@@ -1,12 +1,24 @@
 import { App } from 'octokit';
 import type { GraphQlQueryResponseData } from "@octokit/graphql";
 
+export interface DiscussionList {
+	discussions: Discussion[]
+	pageInfo: PageInfo
+}
+
 export interface Discussion {
 	id: string;
 	number: number;
 	title: string;
 	author: string;
 	createdAt: string;
+}
+
+export interface PageInfo {
+	endCursor: string;
+	hasNextPage: boolean;
+	hasPreviousPage: boolean;
+	startCursor: string;
 }
 
 export const REACTIONS = [
@@ -81,11 +93,23 @@ async function queryGraphQl<T>(query: string, parameters: QueryVariables = {}): 
 	);
 }
 
-export async function getDiscussionList(): Promise<Discussion[]> {
+export async function getDiscussionList(after?: String, before?: String): Promise<DiscussionList> {
+	const PAGE_SIZE = 2;
+
+	let first, last;
+
+	if (after || !before) {
+		first = PAGE_SIZE;
+		last = null;
+	} else {
+		first = null;
+		last = PAGE_SIZE;
+	}
+
 	const body = await queryGraphQl(`
-		query discussionList($repoOwner: String!, $repoName: String!) {
+		query discussionList($repoOwner: String!, $repoName: String!, $after: String, $before: String, $first: Int, $last: Int) {
 			repository(owner: $repoOwner, name: $repoName) {
-				discussions(last: 100) {
+				discussions(first: $first, last: $last, after: $after, before: $before) {
 					edges {
 						node {
 							number
@@ -96,10 +120,18 @@ export async function getDiscussionList(): Promise<Discussion[]> {
 							createdAt
 						}
 					}
+					pageInfo {
+						endCursor
+						hasNextPage
+						hasPreviousPage
+						startCursor
+					}
 				}
 			}
 		}
-	`);
+	`,
+		{ after, before, first, last }
+	);
 
 	const discussions = (body as any).repository.discussions.edges.map((edge: any) => ({
 		number: edge.node.number,
@@ -108,7 +140,9 @@ export async function getDiscussionList(): Promise<Discussion[]> {
 		createdAt: edge.node.createdAt
 	}));
 
-	return discussions;
+	const pageInfo = (body as any).repository.discussions.pageInfo;
+
+	return { discussions, pageInfo };
 }
 
 export async function getDiscussionDetails(number: number): Promise<DiscussionDetails> {
@@ -209,10 +243,4 @@ export async function addReply(comment: String, discussionId: String, commentId?
 	);
 
 	return true;
-	/*const comments = (body as any).repository.discussion.comments.edges;
-	return comments.map((comment: any) => ({
-		author: comment.node.author.login,
-		createdAt: comment.node.createdAt,
-		bodyHTML: comment.node.bodyHTML
-	}));*/
 }

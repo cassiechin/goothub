@@ -6,7 +6,6 @@ export function AddReaction() {
 	const [shown, setShown] = createSignal(false);
 
 	function addReaction(reaction: (typeof REACTIONS)[number]) {
-		console.log('react with', reaction);
 		setShown(false);
 	}
 

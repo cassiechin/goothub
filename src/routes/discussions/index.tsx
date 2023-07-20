@@ -1,16 +1,20 @@
-import { For } from 'solid-js';
-import { A, Title, useRouteData, useNavigate } from 'solid-start';
+import { For, Show } from 'solid-js';
+import { A, Title, useRouteData, useNavigate, useSearchParams } from 'solid-start';
 import {redirect, createServerData$ } from 'solid-start/server';
 import { getDiscussionList } from '~/lib/github/discussions';
 import { AddDiscussion } from '~/components/AddDiscussion';
 import './index.css';
 
 export function routeData() {
-	return createServerData$(() => getDiscussionList());
+	const [searchParams] = useSearchParams();
+	return createServerData$(
+		async ([, after, , before]) => getDiscussionList(after, before),
+		{ key: () => ["after", searchParams.after, "before", searchParams.before] },
+	);
 }
 
 export default function Discussions() {
-	const discussions = useRouteData<typeof routeData>();
+	const discussionList = useRouteData<typeof routeData>();
 	const discussionForm = useRouteData<typeof routeData>();
 	const navigate = useNavigate();
 
@@ -19,8 +23,6 @@ export default function Discussions() {
 		navigate('../discussionForm');
 	}
 
-	const PAGE_SIZE = 5;
-	const PAGE_NUM = 1; // TODO: use props
 	return (
 		<main>
 			<Title>Discussions</Title>
@@ -29,18 +31,27 @@ export default function Discussions() {
 			<table style={{"text-align": "left"}}>
 				<tbody>
 				<tr><th>Title</th><th>Creator</th><th>Created at</th></tr>
-				<For each={discussions()}>
+				<For each={discussionList()?.discussions}>
 					{(d, i) => (
 						<tr>
-							<td >
-							<A href={'/discussions/' + d.number}>{d.title}</A> </td>
-							<td>{d.author}</td> <td> 
-							{d.createdAt} </td>
+							<td><A href={`/discussions/${d.number}`}>{d.title}</A></td>
+							<td>{d.author}</td>
+							<td>{d.createdAt}</td>
 						</tr>
 					)}
 				</For>
 			  </tbody>
 			</table>
+			<Show when={discussionList()?.pageInfo?.hasPreviousPage}>
+				<button>
+					<A href={`?before=${discussionList()?.pageInfo?.startCursor}`} style={{"color": "inherit", "text-decoration": "none"}}>Prev Page</A>
+				</button>
+			</Show>
+			<Show when={discussionList()?.pageInfo?.hasNextPage}>
+				<button>
+					<A href={`?after=${discussionList()?.pageInfo?.endCursor}`} style={{"color": "inherit", "text-decoration": "none"}}>Next Page</A>
+				</button>
+			</Show>
 		</main>
 	);
 }
