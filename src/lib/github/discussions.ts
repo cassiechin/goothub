@@ -15,6 +15,13 @@ export interface Discussion {
 	createdAt: string;
 }
 
+export interface Reply {
+	number: number;
+	title: string;
+	author: string;
+	createdAt: string;
+}
+
 export interface PageInfo {
 	endCursor: string;
 	hasNextPage: boolean;
@@ -250,4 +257,35 @@ export async function addReaction(content: String, subjectId: String) {
 	);
 
 	return true;
+}
+
+export async function getReplies(commentId: String): Promise<Reply[]> {
+	const body = await queryGraphQl(
+		`
+		query discussionCommentReplies($commentId: ID!) {
+			node(id: $commentId) {
+			  ... on DiscussionComment {
+				replies(first: 100) {
+				  edges {
+					node {
+					  author {
+						login
+					  }
+					  createdAt
+					  bodyHTML
+					}
+				  }
+				}
+			  }
+			}
+		}
+	`,
+		{ commentId }
+	);
+	const replies = (body as any).node.replies.edges;
+	return replies.map((replies: any) => ({
+		author: replies.node.author.login,
+		createdAt: replies.node.createdAt,
+		bodyHTML: replies.node.bodyHTML
+	}));
 }

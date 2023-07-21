@@ -2,14 +2,15 @@ import { For, createMemo } from 'solid-js';
 import { RouteDataArgs, Title, refetchRouteData, useRouteData } from 'solid-start';
 import { createServerData$ } from 'solid-start/server';
 import { AddReaction } from '~/components/AddReaction';
-import { AddReply } from '~/components/AddReply';
 import { AddComment } from '~/components/AddComment';
+import { Replies } from '~/components/Replies';
 import {
 	REACTION_EMOJI,
 	getDiscussionComments,
 	getDiscussionDetails
 } from '~/lib/github/discussions';
 import { comment } from 'postcss';
+import './index.css';
 
 export function routeData({ params }: RouteDataArgs) {
 	return createServerData$(
@@ -58,8 +59,8 @@ export default function Discussions() {
 					<h2>Comments</h2>
 					<ul>
 						<For each={comments()}>{(comment) => (<li class="my-2">
-							<div innerHTML={comment.bodyHTML}></div>
-							<AddReply discussionId={discussionId} commentId={comment.id} />
+							<span innerHTML={comment.bodyHTML}></span>
+							<Replies discussionId={discussionId} commentId={comment.id} />
 						</li>)}
 						</For>
 					</ul>
