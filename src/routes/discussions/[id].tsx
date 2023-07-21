@@ -53,7 +53,7 @@ export default function Discussions() {
 							</button>
 						)}
 					</For>
-					<AddReaction subjectId={discussionId} reactions={reactions}/>
+					<AddReaction subjectId={discussionId}  onSuccess={refetchRouteData}/>
 				</div>
 				<div>
 					<h2>Comments</h2>

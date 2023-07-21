@@ -2,21 +2,11 @@ import { For, createSignal, Accessor } from 'solid-js';
 import { ReactionGroup, REACTIONS, REACTION_EMOJI } from '~/lib/github/discussions';
 import './AddReaction.css';
 
-export function AddReaction({subjectId, reactions}: {subjectId: Accessor<String>, reactions:Accessor<ReactionGroup[]>}) {
+export function AddReaction({subjectId, onSuccess}: {subjectId: Accessor<String>, onSuccess: Function}) {
 	const [shown, setShown] = createSignal(false);
 
 	async function addReaction(reaction: (typeof REACTIONS)[number]) {
 		setShown(false);
-		let inserted = false;
-		reactions().forEach((reactionGroup) => {
-			if (reactionGroup.content == reaction) {
-				reactionGroup.totalCount +=1;
-				inserted = true;
-			}
-		})
-		if (!inserted) {
-			reactions().push({content: reaction, totalCount: 1});
-		}
 		await fetch('/api/reaction', {
 			method: 'POST',
 			headers: {
@@ -24,6 +14,7 @@ export function AddReaction({subjectId, reactions}: {subjectId: Accessor<String>
 			  },
 			body: JSON.stringify({content:reaction, subjectId: subjectId()}),
 		});
+		onSuccess();
 	}
 
 	return (
