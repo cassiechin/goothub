@@ -1,5 +1,11 @@
 import { App } from 'octokit';
 import type { GraphQlQueryResponseData } from "@octokit/graphql";
+import { requireEnv } from '../requireEnv';
+
+export interface DiscussionList {
+	discussions: Discussion[]
+	pageInfo: PageInfo
+}
 
 export interface Discussion {
 	id: string;
@@ -7,6 +13,20 @@ export interface Discussion {
 	title: string;
 	author: string;
 	createdAt: string;
+}
+
+export interface Reply {
+	number: number;
+	title: string;
+	author: string;
+	createdAt: string;
+}
+
+export interface PageInfo {
+	endCursor: string;
+	hasNextPage: boolean;
+	hasPreviousPage: boolean;
+	startCursor: string;
 }
 
 export const REACTIONS = [
@@ -39,15 +59,6 @@ export interface ReactionGroup {
 export interface DiscussionDetails extends Discussion {
 	reactionGroups: ReactionGroup[];
 	bodyHTML: string;
-}
-
-function requireEnv(key: string): string {
-	const value = process.env[key];
-	if (value == null) {
-		throw new Error(`Missing ${key} environnement variable.`);
-	}
-
-	return value;
 }
 
 interface QueryVariables {
@@ -88,11 +99,23 @@ async function queryGraphQl<T>(query: string, parameters: QueryVariables = {}): 
 	);
 }
 
-export async function getDiscussionList(): Promise<Discussion[]> {
+export async function getDiscussionList(after?: String, before?: String): Promise<DiscussionList> {
+	const PAGE_SIZE = 5;
+
+	let first, last;
+
+	if (after || !before) {
+		first = PAGE_SIZE;
+		last = null;
+	} else {
+		first = null;
+		last = PAGE_SIZE;
+	}
+
 	const body = await queryGraphQl(`
-		query discussionList($repoOwner: String!, $repoName: String!) {
+		query discussionList($repoOwner: String!, $repoName: String!, $after: String, $before: String, $first: Int, $last: Int) {
 			repository(owner: $repoOwner, name: $repoName) {
-				discussions(last: 100) {
+				discussions(first: $first, last: $last, after: $after, before: $before) {
 					edges {
 						node {
 							number
@@ -103,10 +126,18 @@ export async function getDiscussionList(): Promise<Discussion[]> {
 							createdAt
 						}
 					}
+					pageInfo {
+						endCursor
+						hasNextPage
+						hasPreviousPage
+						startCursor
+					}
 				}
 			}
 		}
-	`);
+	`,
+		{ after, before, first, last }
+	);
 
 	const discussions = (body as any).repository.discussions.edges.map((edge: any) => ({
 		number: edge.node.number,
@@ -115,7 +146,9 @@ export async function getDiscussionList(): Promise<Discussion[]> {
 		createdAt: edge.node.createdAt
 	}));
 
-	return discussions;
+	const pageInfo = (body as any).repository.discussions.pageInfo;
+
+	return { discussions, pageInfo };
 }
 
 export async function getDiscussionDetails(number: number): Promise<DiscussionDetails> {
@@ -201,7 +234,7 @@ export async function getDiscussionComments(number: number): Promise<DiscussionC
 	}));
 }
 
-// TODO, add clientMutationId and replyToId
+// TODO, add clientMutationId
 // TODO, add proper response object
 export async function addReply(comment: String, discussionId: String, commentId?: String): Promise<Boolean> {
 	const body = await queryGraphQl(
@@ -216,12 +249,52 @@ export async function addReply(comment: String, discussionId: String, commentId?
 	);
 
 	return true;
-	/*const comments = (body as any).repository.discussion.comments.edges;
-	return comments.map((comment: any) => ({
-		author: comment.node.author.login,
-		createdAt: comment.node.createdAt,
-		bodyHTML: comment.node.bodyHTML
-	}));*/
+
+
+export async function addReaction(content: String, subjectId: String) {
+	await queryGraphQl(
+		`
+		mutation addReaction($content: ReactionContent!, $subjectId: ID!) {
+			addReaction(input: {content: $content, subjectId: $subjectId}) {
+				clientMutationId
+			}
+		}
+		`,
+		{content, subjectId}
+	);
+
+	return true;
+}
+
+export async function getReplies(commentId: String): Promise<Reply[]> {
+	const body = await queryGraphQl(
+		`
+		query discussionCommentReplies($commentId: ID!) {
+			node(id: $commentId) {
+			  ... on DiscussionComment {
+				replies(first: 100) {
+				  edges {
+					node {
+					  author {
+						login
+					  }
+					  createdAt
+					  bodyHTML
+					}
+				  }
+				}
+			  }
+			}
+		}
+	`,
+		{ commentId }
+	);
+	const replies = (body as any).node.replies.edges;
+	return replies.map((replies: any) => ({
+		author: replies.node.author.login,
+		createdAt: replies.node.createdAt,
+		bodyHTML: replies.node.bodyHTML
+	}));
 }
 
 export async function createDiscussion(discussionBody: String, title: String): Promise<Boolean> {

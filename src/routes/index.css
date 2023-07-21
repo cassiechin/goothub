@@ -1,0 +1,23 @@
+.home-title {
+    text-align: center;
+}
+
+.home-widget {
+    margin: 2rem 0;
+}
+
+@media (max-width: 800px) {
+    #solitaire_embed > div {
+      padding-bottom: 90% !important; /* Change aspect ratio on mobile */
+    }
+  }
+  @media (max-width: 568px) {
+    #solitaire_embed > div {
+      padding-bottom: 100% !important; /* Change aspect ratio on mobile */
+    }
+  }
+  @media (max-width: 414px) {
+    #solitaire_embed > div {
+      padding-bottom: 120% !important; /* Change aspect ratio on mobile */
+    }
+  }

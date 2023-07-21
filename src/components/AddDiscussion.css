@@ -1,25 +1,12 @@
-.add-discussion {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.discussion-form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.discussion-form-item {
+.discussion-form > div {
     margin-top: 20px;
 }
 
-input, textarea {
-    min-width: 300px;
+input {
+    width: 80%;
 }
 
-.submit-button {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
+textarea {
+    width: 80%;
+    min-height: 150px;
 }

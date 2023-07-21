@@ -11,8 +11,8 @@ export function routeData() {
 export default function AddDiscussionPage() {
 	const addDiscussionPage = useRouteData<typeof routeData>();
 	return (
-		<main>
+		<div class="body-container">
             <AddDiscussion />
-		</main>
+		</div>
 	);
 }

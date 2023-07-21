@@ -1,0 +1,33 @@
+.top-nav {
+    background: #009FFD;
+    display: flex;
+    color: #EAF6FF;
+    font-weight: 500;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.left-nav, .right-nav {
+    display: flex;
+    align-items: center;
+}
+
+.left-nav > * {
+    margin: 0 15px 0 0;
+}
+
+.left-nav > *:hover {
+    text-decoration: underline;
+}
+
+main {
+    display: flex;
+    align-items: center;
+}
+
+.user-img {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin: 0 20px 0 10px;
+}

@@ -1,24 +1,26 @@
 import { For, createMemo } from 'solid-js';
-import { RouteDataArgs, Title, useRouteData } from 'solid-start';
+import { RouteDataArgs, Title, refetchRouteData, useRouteData } from 'solid-start';
 import { createServerData$ } from 'solid-start/server';
 import { AddReaction } from '~/components/AddReaction';
-import { AddReply } from '~/components/AddReply';
+import { AddComment } from '~/components/AddComment';
+import { Replies } from '~/components/Replies';
 import {
 	REACTION_EMOJI,
 	getDiscussionComments,
 	getDiscussionDetails
 } from '~/lib/github/discussions';
+import { comment } from 'postcss';
+import './index.css';
 
 export function routeData({ params }: RouteDataArgs) {
 	return createServerData$(
-		(id) => {
+		async (id) => {
 			const discussionId = Number(id);
-			return Promise.all([
+			const data = await Promise.all([
 				getDiscussionDetails(discussionId),
 				getDiscussionComments(discussionId)
-			]).then((data) => {
-				return { discussion: data[0], comments: data[1] };
-			});
+			]);
+			return { discussion: data[0], comments: data[1] };
 		},
 		{ key: () => params.id }
 	);
@@ -26,15 +28,15 @@ export function routeData({ params }: RouteDataArgs) {
 
 export default function Discussions() {
 	const discussionAndComments = useRouteData<typeof routeData>();
-	console.log(discussionAndComments);
 	const reactions = createMemo(
 		() => discussionAndComments()?.discussion.reactionGroups.filter((group) => group.totalCount > 0)
 	);
-	const discussion = () => discussionAndComments()?.discussion;
+	const discussion = createMemo(() => discussionAndComments()?.discussion);
 	const comments = () => discussionAndComments()?.comments;
+	const discussionId = createMemo(() => discussionAndComments()?.discussion.id);
 
 	return (
-		<main>
+		<div class="body-container">
 			<Title>GootHub - Discussions</Title>
 			<section>
 				<h1>{discussion()?.title}</h1>
@@ -42,7 +44,7 @@ export default function Discussions() {
 					by {discussion()?.author} on {discussion()?.createdAt}
 				</p>
 				<div innerHTML={discussion()?.bodyHTML} />
-				<div class="reactions">
+				<div class="flex justify-end">
 					<For each={reactions()}>
 						{(group) => (
 							<button disabled>
@@ -51,21 +53,22 @@ export default function Discussions() {
 							</button>
 						)}
 					</For>
-					<AddReaction />
+					<AddReaction subjectId={discussionId} />
 				</div>
-				<div class="comments">
+				<div>
 					<h2>Comments</h2>
 					<ul>
-						<For each={comments()}>{(comment) => (
-							<>
-								<div innerHTML={comment.bodyHTML}></div>
-								<AddReply discussionId={discussion()?.id} commentId={comment.id} />
-							</>
-						)}
+						<For each={comments()}>{(comment) => (<li class="my-2">
+							<span innerHTML={comment.bodyHTML}></span>
+							<Replies discussionId={discussionId} commentId={comment.id} />
+						</li>)}
 						</For>
 					</ul>
+					<div class="mt-12">
+						<AddComment discussionId={discussionId} onSuccess={refetchRouteData} />
+					</div>
 				</div>
 			</section>
-		</main>
+		</div>
 	);
 }

@@ -2,7 +2,7 @@ import { createSignal, createRenderEffect } from 'solid-js';
 import './AddDiscussion.css';
 
 export function AddDiscussion({}) {
-	// const [shown, setShown] = createSignal(false);
+    // const [shown, setShown] = createSignal(false);
 
 	function addDiscussion() {
         console.log(title());
@@ -26,8 +26,8 @@ export function AddDiscussion({}) {
         el.addEventListener("input", (e) => setField(e.target.value));
 	  }
 
-	return (
-		<div class="add-discussion">
+    return (
+        <div class="add-discussion">
             <h1>Create a Discussion</h1>
             <div class="discussion-form">
                 <div class="discussion-form-item">
@@ -42,10 +42,10 @@ export function AddDiscussion({}) {
                         <textarea use:model={[discussion, body]}></textarea>
                     </label>
                 </div>
-                <div class="submit-button">
+                <div>
                     <button onClick={() => addDiscussion()}>Submit</button>
                 </div>
             </div>
-		</div>
-	);
+        </div>
+    );
 }
