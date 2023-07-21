@@ -20,6 +20,7 @@ export function AddReaction({subjectId}: {subjectId: Accessor<String>}) {
 		<div class="add-reaction">
 			<button onClick={() => setShown((s) => !s)}>Add reaction</button>
 			<dialog open={shown()}>
+				<button class="close-icon flex justify-center m-0 p-1" onClick={() => setShown(false)}><span class="material-icons">close</span></button>				
 				<For each={REACTIONS}>{(reaction) => <button onClick={() => addReaction(reaction)}>{REACTION_EMOJI[reaction]}</button>}</For>
 			</dialog>
 		</div>

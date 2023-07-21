@@ -5,28 +5,24 @@
 body {
 	background: #EAF6FF;
 	color: #232528;
-	font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	font-size: 1rem;
+	@apply font-sans;
 }
 
-main {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+.body-container {
+	padding: 3rem;
+	margin: auto;
+	max-width: 900px;
 }
 
 h1 {
 	color: #2A2A72;
-	font-size: 4rem;
-	font-weight: 500;
-	line-height: 1.1;
-	margin: 4rem auto;
-	max-width: 14rem;
+	@apply mb-4 text-4xl font-bold leading-none tracking-tight md:text-5xl lg:text-6xl;
 }
 
 h2 {
 	color: #FFA400;
-	font-size: 2rem;
+	@apply mb-3 text-2xl font-normal leading-none tracking-tight md:text-3xl lg:text-4xl;
 }
 
 @media (min-width: 480px) {
@@ -38,7 +34,11 @@ h2 {
 		max-width: none;
 	}
 }
- 
-img {
-	max-height: 150px;
+
+button {
+	@apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center;
+}
+
+button:hover {
+	@apply bg-blue-700;
 }

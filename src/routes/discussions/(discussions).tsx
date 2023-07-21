@@ -1,6 +1,6 @@
 import { For, Show } from 'solid-js';
 import { A, Title, useRouteData, useNavigate, useSearchParams } from 'solid-start';
-import {redirect, createServerData$ } from 'solid-start/server';
+import { redirect, createServerData$ } from 'solid-start/server';
 import { getDiscussionList } from '~/lib/github/discussions';
 import { AddDiscussion } from '~/components/AddDiscussion';
 import './index.css';
@@ -24,34 +24,41 @@ export default function Discussions() {
 	}
 
 	return (
-		<main>
+		<div class="body-container">
 			<Title>Discussions</Title>
-			<button onClick={() => goToPage()}>New Discussion</button>
 			<h1>Discussions</h1>
-			<table style={{"text-align": "left"}}>
+			<div class="button-container">
+				<button class="new-discussion-button" onClick={() => goToPage()}>
+					<span class="material-icons">add</span>
+					<span>New Discussion</span>
+				</button>
+			</div>
+			<table class="table-auto">
 				<tbody>
-				<tr><th>Title</th><th>Creator</th><th>Created at</th></tr>
-				<For each={discussionList()?.discussions}>
-					{(d, i) => (
-						<tr>
-							<td><A href={`/discussions/${d.number}`}>{d.title}</A></td>
-							<td>{d.author}</td>
-							<td>{d.createdAt}</td>
-						</tr>
-					)}
-				</For>
-			  </tbody>
+					<tr><th>Title</th><th>Creator</th><th>Created at</th></tr>
+					<For each={discussionList()?.discussions}>
+						{(d, i) => (
+							<tr>
+								<td><A href={`/discussions/${d.number}`}>{d.title}</A></td>
+								<td>{d.author}</td>
+								<td>{d.createdAt}</td>
+							</tr>
+						)}
+					</For>
+				</tbody>
 			</table>
-			<Show when={discussionList()?.pageInfo?.hasPreviousPage}>
-				<button>
-					<A href={`?before=${discussionList()?.pageInfo?.startCursor}`} style={{"color": "inherit", "text-decoration": "none"}}>Prev Page</A>
-				</button>
-			</Show>
-			<Show when={discussionList()?.pageInfo?.hasNextPage}>
-				<button>
-					<A href={`?after=${discussionList()?.pageInfo?.endCursor}`} style={{"color": "inherit", "text-decoration": "none"}}>Next Page</A>
-				</button>
-			</Show>
-		</main>
+			<div class="nav-button-container">
+				<Show when={discussionList()?.pageInfo?.hasPreviousPage}>
+					<button class="prev-button">
+						<A href={`?before=${discussionList()?.pageInfo?.startCursor}`}>Prev Page</A>
+					</button>
+				</Show>
+				<Show when={discussionList()?.pageInfo?.hasNextPage}>
+					<button class="next-button">
+						<A href={`?after=${discussionList()?.pageInfo?.endCursor}`}>Next Page</A>
+					</button>
+				</Show>
+			</div>
+		</div>
 	);
 }

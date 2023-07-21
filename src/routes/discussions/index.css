@@ -1,11 +1,65 @@
-button {
-    background-color: #1f883d;
-    color: white;
-    border-radius: 8px;
-    height:  32px;
-}
-
 input, textarea {
     height: 40px;
     border-radius: 8px;
+}
+
+.nav-button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.new-discussion-button {
+    @apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center;
+}
+
+.new-discussion-button > .material-icons {
+	margin: 0 0.5rem 0 0;
+}
+
+.prev-button {
+    @apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l;
+}
+
+.next-button {
+    @apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r;
+}
+
+table {
+    @apply min-w-full text-left text-sm font-normal;
+    margin: 1rem 0;
+}
+
+thead {
+    @apply border-b font-medium dark:border-neutral-500;
+}
+
+th {
+    @apply px-6 py-4 text-lg;
+}
+
+tr {
+    @apply border-b;
+}
+
+td {
+    @apply whitespace-nowrap px-6 py-4;
+}
+
+td:first-child {
+    @apply hover:underline;
+}
+
+.add-comment-container {
+    margin: 3rem 0 0 0;
+    padding: 1rem 0 0 0;
+}
+
+.comment-list-item {
+    margin: 0.5rem 0;
+}
+
+.add-reply {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }

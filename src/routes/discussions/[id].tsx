@@ -35,7 +35,7 @@ export default function Discussions() {
 	const discussionId = createMemo(() => discussionAndComments()?.discussion.id);
 
 	return (
-		<main>
+		<div class="body-container">
 			<Title>GootHub - Discussions</Title>
 			<section>
 				<h1>{discussion()?.title}</h1>
@@ -57,17 +57,17 @@ export default function Discussions() {
 				<div class="comments">
 					<h2>Comments</h2>
 					<ul>
-						<For each={comments()}>{(comment) => (
-							<>
-								<div innerHTML={comment.bodyHTML}></div>
-								<AddReply discussionId={discussionId} commentId={comment.id} />
-							</>
-						)}
+						<For each={comments()}>{(comment) => (<li class="comment-list-item">
+							<div innerHTML={comment.bodyHTML}></div>
+							<AddReply discussionId={discussionId} commentId={comment.id} />
+						</li>)}
 						</For>
 					</ul>
-					<AddComment discussionId={discussionId} onSuccess={refetchRouteData}/>
+					<div class="add-comment-container">
+						<AddComment discussionId={discussionId} onSuccess={refetchRouteData} />
+					</div>
 				</div>
 			</section>
-		</main>
+		</div>
 	);
 }
