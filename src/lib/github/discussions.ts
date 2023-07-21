@@ -236,3 +236,18 @@ export async function addReply(comment: String, discussionId: String, commentId?
 
 	return true;
 }
+
+export async function addReaction(content: String, subjectId: String) {
+	await queryGraphQl(
+		`
+		mutation addReaction($content: ReactionContent!, $subjectId: ID!) {
+			addReaction(input: {content: $content, subjectId: $subjectId}) {
+				clientMutationId
+			}
+		}
+		`,
+		{content, subjectId}
+	);
+
+	return true;
+}

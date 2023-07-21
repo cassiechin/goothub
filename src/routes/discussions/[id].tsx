@@ -9,17 +9,17 @@ import {
 	getDiscussionComments,
 	getDiscussionDetails
 } from '~/lib/github/discussions';
+import { comment } from 'postcss';
 
 export function routeData({ params }: RouteDataArgs) {
 	return createServerData$(
-		(id) => {
+		async (id) => {
 			const discussionId = Number(id);
-			return Promise.all([
+			const data = await Promise.all([
 				getDiscussionDetails(discussionId),
 				getDiscussionComments(discussionId)
-			]).then((data) => {
-				return { discussion: data[0], comments: data[1] };
-			});
+			]);
+			return { discussion: data[0], comments: data[1] };
 		},
 		{ key: () => params.id }
 	);
@@ -30,8 +30,9 @@ export default function Discussions() {
 	const reactions = createMemo(
 		() => discussionAndComments()?.discussion.reactionGroups.filter((group) => group.totalCount > 0)
 	);
-	const discussion = () => discussionAndComments()?.discussion;
+	const discussion = createMemo(() => discussionAndComments()?.discussion);
 	const comments = () => discussionAndComments()?.comments;
+	const discussionId = createMemo(() => discussionAndComments()?.discussion.id);
 
 	return (
 		<div class="body-container">
@@ -51,21 +52,19 @@ export default function Discussions() {
 							</button>
 						)}
 					</For>
-					<AddReaction />
+					<AddReaction subjectId={discussionId} />
 				</div>
 				<div class="comments">
 					<h2>Comments</h2>
 					<ul>
-						<For each={comments()}>{(comment) => (
-							<li class="comment-list-item">
-								<div innerHTML={comment.bodyHTML}></div>
-								<AddReply discussionId={discussion()?.id} commentId={comment.id} />
-							</li>
-						)}
+						<For each={comments()}>{(comment) => (<li class="comment-list-item">
+							<div innerHTML={comment.bodyHTML}></div>
+							<AddReply discussionId={discussionId} commentId={comment.id} />
+						</li>)}
 						</For>
 					</ul>
 					<div class="add-comment-container">
-						<AddComment discussionId={discussion()?.id} onSuccess={refetchRouteData}/>
+						<AddComment discussionId={discussionId} onSuccess={refetchRouteData} />
 					</div>
 				</div>
 			</section>

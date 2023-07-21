@@ -1,7 +1,7 @@
-import { For, createSignal, createRenderEffect } from 'solid-js';
+import { For, createSignal, createRenderEffect, Accessor } from 'solid-js';
 import './AddComment.css';
 
-export function AddComment({ discussionId, onSuccess } : { discussionId: String, onSuccess: Function}) {
+export function AddComment({ discussionId, onSuccess } : { discussionId: Accessor<String>, onSuccess: Function}) {
 	// TODO, move to reusable file so that AddReply can also use
 	async function addComment() {
 		await fetch('/api/comments', {
@@ -9,7 +9,7 @@ export function AddComment({ discussionId, onSuccess } : { discussionId: String,
 			headers: {
 				"Content-Type": "application/json",
 			  },
-			body: JSON.stringify({ comment: comment(), discussionId }),
+			body: JSON.stringify({ comment: comment(), discussionId: discussionId() }),
 		});
 		onSuccess && onSuccess();
 		setComment("");
