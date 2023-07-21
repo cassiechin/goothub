@@ -43,7 +43,7 @@ export default function Discussions() {
 					by {discussion()?.author} on {discussion()?.createdAt}
 				</p>
 				<div innerHTML={discussion()?.bodyHTML} />
-				<div class="reactions">
+				<div class="flex justify-end">
 					<For each={reactions()}>
 						{(group) => (
 							<button disabled>
@@ -54,16 +54,16 @@ export default function Discussions() {
 					</For>
 					<AddReaction subjectId={discussionId} />
 				</div>
-				<div class="comments">
+				<div>
 					<h2>Comments</h2>
 					<ul>
-						<For each={comments()}>{(comment) => (<li class="comment-list-item">
+						<For each={comments()}>{(comment) => (<li class="my-2">
 							<div innerHTML={comment.bodyHTML}></div>
 							<AddReply discussionId={discussionId} commentId={comment.id} />
 						</li>)}
 						</For>
 					</ul>
-					<div class="add-comment-container">
+					<div class="mt-12">
 						<AddComment discussionId={discussionId} onSuccess={refetchRouteData} />
 					</div>
 				</div>
