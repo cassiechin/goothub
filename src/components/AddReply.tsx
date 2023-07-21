@@ -1,5 +1,4 @@
 import { For, createSignal, createRenderEffect, Accessor } from 'solid-js';
-import './AddReply.css';
 
 export function AddReply({ discussionId, commentId } : { discussionId: Accessor<String>, commentId: String}) {
 	// TODO, move to reusable file so that AddComment can also use
@@ -23,10 +22,10 @@ export function AddReply({ discussionId, commentId } : { discussionId: Accessor<
 	  }
 
 	return (
-		<div class="add-reply">
+		<div class="flex justify-between w-full">
 			{/* TODO convert to textarea on click? */}
 			{/* TODO, is this the best way to use an input? */}
-			<input type="text" placeholder="Write a reply" use:model={[reply, setReply]} />
+			<input class="w-4/5 rounded-lg h-10" type="text" placeholder="Write a reply" use:model={[reply, setReply]} />
 			<button onClick={addReply}>Reply</button>
 		</div>
 	);

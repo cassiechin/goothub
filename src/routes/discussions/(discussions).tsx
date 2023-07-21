@@ -1,9 +1,7 @@
 import { For, Show } from 'solid-js';
 import { A, Title, useRouteData, useNavigate, useSearchParams } from 'solid-start';
-import { redirect, createServerData$ } from 'solid-start/server';
+import { createServerData$ } from 'solid-start/server';
 import { getDiscussionList } from '~/lib/github/discussions';
-import { AddDiscussion } from '~/components/AddDiscussion';
-import './index.css';
 
 export function routeData() {
 	const [searchParams] = useSearchParams();
@@ -15,11 +13,9 @@ export function routeData() {
 
 export default function Discussions() {
 	const discussionList = useRouteData<typeof routeData>();
-	const discussionForm = useRouteData<typeof routeData>();
 	const navigate = useNavigate();
 
 	function goToPage() {
-		console.log('test does this click');
 		navigate('../discussionForm');
 	}
 
@@ -28,33 +24,37 @@ export default function Discussions() {
 			<Title>Discussions</Title>
 			<h1>Discussions</h1>
 			<div class="button-container">
-				<button class="new-discussion-button" onClick={() => goToPage()}>
-					<span class="material-icons">add</span>
+				<button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center" onClick={() => goToPage()}>
+					<span class="material-icons mr-1">add</span>
 					<span>New Discussion</span>
 				</button>
 			</div>
-			<table class="table-auto">
+			<table class="table-auto min-w-full text-left text-sm font-normal">
 				<tbody>
-					<tr><th>Title</th><th>Creator</th><th>Created at</th></tr>
+					<tr>
+						<For each={["Title", "Creator", "Created at"]}>
+							{(heading) => <td class="whitespace-nowrap px-6 py-4 font-semibold text-lg">{heading}</td>}
+						</For>
+					</tr>
 					<For each={discussionList()?.discussions}>
 						{(d, i) => (
-							<tr>
-								<td><A href={`/discussions/${d.number}`}>{d.title}</A></td>
-								<td>{d.author}</td>
-								<td>{d.createdAt}</td>
+							<tr class="border-b">
+								<td class="whitespace-nowrap px-6 py-4 hover:underline"><A href={`/discussions/${d.number}`}>{d.title}</A></td>
+								<td class="whitespace-nowrap px-6 py-4">{d.author}</td>
+								<td class="whitespace-nowrap px-6 py-4">{d.createdAt}</td>
 							</tr>
 						)}
 					</For>
 				</tbody>
 			</table>
-			<div class="nav-button-container">
+			<div class="flex justify-between">
 				<Show when={discussionList()?.pageInfo?.hasPreviousPage}>
-					<button class="prev-button">
+					<button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
 						<A href={`?before=${discussionList()?.pageInfo?.startCursor}`}>Prev Page</A>
 					</button>
 				</Show>
 				<Show when={discussionList()?.pageInfo?.hasNextPage}>
-					<button class="next-button">
+					<button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
 						<A href={`?after=${discussionList()?.pageInfo?.endCursor}`}>Next Page</A>
 					</button>
 				</Show>

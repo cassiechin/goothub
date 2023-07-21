@@ -1,5 +1,4 @@
 import { For, createSignal, createRenderEffect, Accessor } from 'solid-js';
-import './AddComment.css';
 
 export function AddComment({ discussionId, onSuccess } : { discussionId: Accessor<String>, onSuccess: Function}) {
 	// TODO, move to reusable file so that AddReply can also use
@@ -24,13 +23,13 @@ export function AddComment({ discussionId, onSuccess } : { discussionId: Accesso
 	  }
 
 	return (
-		<div class="add-comment">
+		<div>
 			{/* TODO convert to textarea on click? */}
 			{/* TODO, is this the best way to use an input? */}
 			<div>
-				<input type="text" placeholder="Write a comment" use:model={[comment, setComment]} />
+				<input class="w-4/5 rounded-lg h-10" type="text" placeholder="Write a comment" use:model={[comment, setComment]} />
 			</div>
-			<div class="add-comment-button-container">
+			<div class="mt-4">
 				<button onClick={addComment}>Comment</button>
 			</div>
 		</div>
