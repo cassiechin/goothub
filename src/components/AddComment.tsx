@@ -27,7 +27,7 @@ export function AddComment({ discussionId, onSuccess } : { discussionId: Accesso
 			{/* TODO convert to textarea on click? */}
 			{/* TODO, is this the best way to use an input? */}
 			<div>
-				<input type="text" placeholder="Write a comment" use:model={[comment, setComment]} />
+				<input class="w-4/5 rounded-lg h-10" type="text" placeholder="Write a comment" use:model={[comment, setComment]} />
 			</div>
 			<div class="mt-4">
 				<button onClick={addComment}>Comment</button>
