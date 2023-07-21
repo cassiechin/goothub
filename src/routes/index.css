@@ -1,0 +1,10 @@
+.home-title {
+    text-align: center;
+}
+
+.home-img {
+    display: flex;
+	height: 150px;
+    justify-content: center;
+    margin: 100px;
+}

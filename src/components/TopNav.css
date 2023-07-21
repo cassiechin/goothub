@@ -31,12 +31,3 @@ main {
     height: 32px;
     margin: 0 20px 0 10px;
 }
-
-button {
-    @apply font-bold px-4 rounded;
-    @apply bg-blue-500 text-white;
-}
-
-button:hover {
-    @apply bg-blue-700;
-}

@@ -12,6 +12,7 @@ import {
 	Scripts,
 	Title
 } from 'solid-start';
+import 'material-icons/iconfont/material-icons.css';
 import './root.css';
 import { SessionProvider } from "@solid-auth/base/client";
 import {TopNav} from './components/TopNav';

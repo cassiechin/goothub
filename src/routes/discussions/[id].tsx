@@ -34,7 +34,7 @@ export default function Discussions() {
 	const comments = () => discussionAndComments()?.comments;
 
 	return (
-		<main>
+		<div class="body-container">
 			<Title>GootHub - Discussions</Title>
 			<section>
 				<h1>{discussion()?.title}</h1>
@@ -57,16 +57,18 @@ export default function Discussions() {
 					<h2>Comments</h2>
 					<ul>
 						<For each={comments()}>{(comment) => (
-							<>
+							<li class="comment-list-item">
 								<div innerHTML={comment.bodyHTML}></div>
 								<AddReply discussionId={discussion()?.id} commentId={comment.id} />
-							</>
+							</li>
 						)}
 						</For>
 					</ul>
-					<AddComment discussionId={discussion()?.id} onSuccess={refetchRouteData}/>
+					<div class="add-comment-container">
+						<AddComment discussionId={discussion()?.id} onSuccess={refetchRouteData}/>
+					</div>
 				</div>
 			</section>
-		</main>
+		</div>
 	);
 }

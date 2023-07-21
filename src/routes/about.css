@@ -1,0 +1,14 @@
+.about-page li {
+	margin: 0 0 0 40px;
+	padding-left: 0px;
+}
+
+.about-page li > div {
+	margin: 40px 0 0 0;
+}
+
+.about-page li:before {
+	display: block;
+	float: left;
+	padding-right: 30px;
+}
