@@ -53,7 +53,7 @@ export default function Discussions() {
 							</button>
 						)}
 					</For>
-					<AddReaction subjectId={discussionId} />
+					<AddReaction subjectId={discussionId} reactions={reactions}/>
 				</div>
 				<div>
 					<h2>Comments</h2>
