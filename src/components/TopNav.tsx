@@ -17,6 +17,7 @@ export function TopNav() {
     const user = () => session()?.user;
     return (<div class="top-nav">
         <div class="left-nav">
+            <img class="h-12" src="/terminalkitty.png" />
             <A href="/">Home</A>
             <A href="/discussions">Discussions</A>
             <A href="/about">About</A>

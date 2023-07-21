@@ -11,6 +11,8 @@ body {
 
 .body-container {
 	padding: 3rem;
+	margin: auto;
+	max-width: 900px;
 }
 
 h1 {
@@ -20,7 +22,7 @@ h1 {
 
 h2 {
 	color: #FFA400;
-	font-size: 2rem;
+	@apply mb-3 text-2xl font-normal leading-none tracking-tight md:text-3xl lg:text-4xl;
 }
 
 @media (min-width: 480px) {
@@ -35,10 +37,6 @@ h2 {
 
 button {
 	@apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center;
-}
-
-button > .material-icons {
-	margin: 0 0.5rem 0 0;
 }
 
 button:hover {

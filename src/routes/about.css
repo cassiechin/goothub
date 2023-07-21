@@ -1,3 +1,7 @@
+.about-page-item {
+	margin: 2rem 0;
+}
+
 .about-page li {
 	margin: 0 0 0 40px;
 	padding-left: 0px;
@@ -11,4 +15,9 @@
 	display: block;
 	float: left;
 	padding-right: 30px;
+}
+
+.technologies-image-container > img{
+	display: inline;
+	height: 150px;
 }

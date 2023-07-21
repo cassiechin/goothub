@@ -15,7 +15,7 @@ export default function About() {
     return (
         <div class="body-container about-page">        
 			<h1>About</h1>
-            <div>
+            <div class="about-page-item">
                 <h2>Team</h2>
                 <ul class="list-disc">
                     <li>Cassie Chin</li>
@@ -24,13 +24,21 @@ export default function About() {
                     <li>Tony Huynh</li>
                 </ul>
             </div>
-            <div>
+            <div class="about-page-item">
                 <h2>Deployment</h2>
                 <ul class="list-disc">
                     <li>UID: {deployment()?.uid}</li>
                     <li>URL: {deployment()?.url}</li>
                     <li>Created: {`${new Date(deployment()?.created || 0)}`}</li>
                 </ul>
+            </div>
+            <div class="about-page-item">
+                <h2>Technologies</h2>
+                <div class="technologies-image-container">
+                    <img src="/solidjs.png"></img>
+                    <img src="/vercel.png"></img>
+                    <img src="/githublogo.png"></img>
+                </div>
             </div>
         </div>
     );
