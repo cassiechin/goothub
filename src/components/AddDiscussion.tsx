@@ -9,11 +9,11 @@ export function AddDiscussion({}) {
         console.log(discussion());
 
         fetch('/api/discussion', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({discussionBody: discussion(), title: title(), categoryId: null})
+			method: 'POST',
+			headers: {
+				"Content-Type": "application/json",
+			  },
+            body: JSON.stringify({discussionBody: discussion(), title: title()})
         });
 	}
 
